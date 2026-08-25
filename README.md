@@ -2,13 +2,11 @@
 
 Attention-gated fusion conditioned on a missingness mask, trained with modality dropout, evaluated against early/late/fixed-weight fusion, dropout-only fusion, gating-only-no-dropout, and a post-2023 imputation-style baseline — on CMU-MOSI.
 
-See [`manuscript.md`](./manuscript.md) for the full write-up (Introduction, Methods, Results, Discussion, Limitations, Conclusion, Future Work). Citations are left as `[CITE]` placeholders to be filled in.
-
 ## Repo structure
 
 ```
 .
-├── manuscript.md                       # full paper draft
+
 ├── notebooks/
 │   └── attention_gated_fusion.ipynb    # Colab notebook: data → models → results, phases 0-3
 ├── docs/
