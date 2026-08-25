@@ -1,0 +1,70 @@
+# Project Execution Checklist
+### Attention-Gated Fusion for Modality-Robust Affective Computing
+
+This checklist embeds your project's specific rationale (attention-gated fusion conditioned on a missingness mask, distinct from imputation methods like MMIN/TFR-Net and from modality-dropout-only baselines) into an executable sequence, from setup through a submittable draft. Work top to bottom — each phase unblocks the next.
+
+---
+
+## Phase 0 — Setup (Colab environment)
+- [ ] Colab notebook created, GPU runtime selected (Runtime → Change runtime type → T4/A100)
+- [ ] Random seed fixed globally (Python, NumPy, PyTorch/TF) and logged at the top of the notebook
+- [ ] Dataset selected and access confirmed (e.g., IEMOCAP, CMU-MOSEI, or CMU-MOSI — pick one primary; note license terms)
+- [ ] Data mounted/downloaded into Colab (Drive mount or direct download script) with a reproducible cell — no manual upload steps that break re-runs
+- [ ] Modality set finalized (e.g., audio + text + video) and confirmed present in the chosen dataset
+- [ ] Environment pinned: `requirements.txt` or a pip-install cell with exact versions, so the notebook is reproducible weeks later
+
+## Phase 1 — Introduction (write early, refine later)
+- [ ] Problem stated concretely: multimodal emotion recognition degrades when a modality is missing at inference
+- [ ] Gap named specifically: imputation methods (MMIN, TFR-Net) add a generative sub-network and its own failure mode; per-combination models scale combinatorially — neither is addressed by a lightweight, missingness-conditioned gate
+- [ ] Your contribution stated as ONE sentence, separable from adopted techniques:
+  > "We propose an attention-gated fusion layer conditioned explicitly on a missingness indicator, trained with modality dropout, that reweights available modalities without reconstructing missing ones."
+- [ ] Scope boundary stated: which modalities, which dataset(s), what you are NOT claiming (e.g., not claiming SOTA on all missingness rates, not claiming cross-domain results unless you run that experiment)
+- [ ] 3–5 closest prior works cited with a one-sentence differentiator each (MMIN, TFR-Net, at least one gated-fusion method, at least one post-2023 missing-modality method)
+
+## Phase 2 — Methods (build in this order in Colab)
+- [ ] **Data pipeline**: load dataset → preprocess each modality (audio features, text embeddings, video/visual features) → cell that prints shapes/sanity stats
+- [ ] **Missingness simulation module**: function that masks out one or more modalities at a controllable rate; used identically for train (dropout augmentation) and test (evaluation conditions) — document the rates you'll test (e.g., 0%, 25%, 50%, 75% missing)
+- [ ] **Baseline models implemented first** (so you have comparison numbers before debugging your main model):
+  - [ ] Early fusion
+  - [ ] Late fusion
+  - [ ] Fixed-weight fusion
+  - [ ] Modality-dropout-trained fusion (no gating) — isolates the dropout-training contribution
+  - [ ] One post-2023 missing-modality method (imputation or gated) as the primary SOTA comparison
+- [ ] **Your model**: attention-gated fusion layer implemented, explicitly taking the missingness mask as a conditioning input (not just learned from feature statistics)
+- [ ] Architecture diagram or clear module breakdown documented in a markdown cell (layer sizes, gate computation, fusion step)
+- [ ] Training config logged in one cell: optimizer, LR, schedule, batch size, epochs, hardware, seed
+- [ ] Checkpointing implemented (save best model by validation metric) so Colab disconnects don't lose progress
+- [ ] Sanity check: overfit on a tiny subset first to confirm the pipeline trains at all before full runs
+
+## Phase 3 — Results (the emphasis — build this section as you run experiments, not after)
+- [ ] **Main metric table**: accuracy/F1 (or task-appropriate metric) for every model × every missingness rate, in one table
+- [ ] **Variance reported**: run each config across ≥3 seeds; report mean ± std or CI — no single-run numbers
+- [ ] **Statistical significance**: paired test (e.g., paired t-test or bootstrap CI) between your method and the strongest baseline where margins are close
+- [ ] **Efficiency table**: parameter count, FLOPs, inference latency (ms/sample) for your method vs. MMIN/TFR-Net-style imputation baseline and vs. per-combination baseline — this operationalizes "lighter-weight," don't just assert it
+- [ ] **Ablation table**: isolate contributions —
+  - [ ] gating + dropout training (full method)
+  - [ ] dropout training only, no gating
+  - [ ] gating only, no dropout training
+  - [ ] neither (plain fusion)
+- [ ] **Breakdown by missingness pattern**, not just aggregate: which specific modality missing hurts most, and does your gate compensate differently per modality?
+- [ ] **Failure case check**: at least one qualitative example or error analysis where your method underperforms — include it, don't hide it
+- [ ] Every figure/table generated by a re-runnable Colab cell (no manually-pasted numbers) — this is what makes it reproducible when you write it up
+- [ ] Seeds and exact config logged next to each result table so numbers can be regenerated later
+
+## Phase 4 — Discussion
+- [ ] Interpret the ablation: does the gap between "dropout-only" and "full method" actually support the gating mechanism being the source of improvement?
+- [ ] Revisit the Introduction's contribution claim — does the Results table actually support it, word for word? Adjust the claim if not.
+- [ ] Limitations named explicitly: dataset(s) tested, modality types covered, compute budget, missingness rates tested (not exhaustive)
+- [ ] Alternative explanation considered: could gains come from added parameters/capacity rather than the gating mechanism specifically? (Address via the ablation + parameter-matched baseline if possible)
+
+## Phase 5 — Conclusion
+- [ ] Contribution restated to match — not exceed — what Results support
+- [ ] Cross-domain generalization claim: either (a) explicitly softened to "we hypothesize this generalizes to other multimodal robustness tasks" with no experiment, or (b) backed by a small second-dataset run — pick one and be consistent
+- [ ] Future work listed separately from anything left unfinished in current scope
+- [ ] No new numbers or claims introduced that don't trace back to Results/Discussion
+
+## Phase 6 — Final pass before sharing/submitting
+- [ ] Full notebook runs top-to-bottom on a fresh Colab runtime with no manual steps (Runtime → Restart and run all)
+- [ ] All reported numbers in the text match the notebook's output exactly
+- [ ] Citations for MMIN, TFR-Net, and the post-2023 baseline are complete and correctly attributed
+- [ ] README or top markdown cell explains how to reproduce every table/figure

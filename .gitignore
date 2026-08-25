@@ -1,0 +1,16 @@
+# Data (downloaded via notebook, not versioned)
+data/
+*.pkl
+
+# Generated results/checkpoints
+results_raw.csv
+config_log.json
+ckpt_*.pt
+
+# Jupyter/Colab
+.ipynb_checkpoints/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
