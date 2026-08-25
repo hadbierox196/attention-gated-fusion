@@ -1,0 +1,20 @@
+{
+  "seeds": [
+    42,
+    123,
+    2024
+  ],
+  "missing_rates": [
+    0.0,
+    0.25,
+    0.5,
+    0.75
+  ],
+  "batch_size": 32,
+  "hidden_dim": 128,
+  "epochs": 15,
+  "lr": 0.001,
+  "optimizer": "Adam",
+  "hardware": "cuda",
+  "dropout_training": "uniform rate sampled per batch, range (0.0, 0.75)"
+}
