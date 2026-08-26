@@ -1,20 +1,182 @@
 {
-  "seeds": [
-    42,
-    123,
-    2024
-  ],
-  "missing_rates": [
-    0.0,
-    0.25,
-    0.5,
-    0.75
-  ],
-  "batch_size": 32,
-  "hidden_dim": 128,
-  "epochs": 15,
-  "lr": 0.001,
-  "optimizer": "Adam",
-  "hardware": "cuda",
-  "dropout_training": "uniform rate sampled per batch, range (0.0, 0.75)"
+  "run_timestamp_utc": "2026-08-25T18:49:37.290147+00:00",
+  "python_version": "3.13.15 (main, Aug  6 2026, 11:06:23) [GCC 11.4.0]",
+  "platform": "Linux-6.6.122+-x86_64-with-glibc2.35",
+  "torch_version": "2.11.0+cu128",
+  "device": "cuda",
+  "git_commit": null,
+  "config": {
+    "batch_size": 32,
+    "data": {
+      "path": "data/aligned_50.pkl",
+      "text_dim": 300
+    },
+    "epochs": 15,
+    "fixed_weight_fusion_prior": [
+      0.4,
+      0.3,
+      0.3
+    ],
+    "hidden_dim": 128,
+    "learning_rate": 0.001,
+    "missingness": {
+      "eval_rates": [
+        0.0,
+        0.25,
+        0.5,
+        0.75
+      ],
+      "train_rate_range": [
+        0.0,
+        0.75
+      ]
+    },
+    "models": [
+      "early_fusion",
+      "late_fusion",
+      "fixed_weight_fusion",
+      "dropout_only_fusion",
+      "gating_only_no_dropout",
+      "imputation_baseline_post2023",
+      "attention_gated_fusion_full"
+    ],
+    "optimizer": "adam",
+    "output": {
+      "config_log_json": "config_log.json",
+      "results_csv": "results_raw.csv"
+    },
+    "seeds": [
+      42,
+      123,
+      2024
+    ]
+  },
+  "runs": [
+    {
+      "model": "early_fusion",
+      "seed": 42,
+      "best_val_f1": 0.8188976377952756,
+      "n_params": 503681
+    },
+    {
+      "model": "early_fusion",
+      "seed": 123,
+      "best_val_f1": 0.823045267489712,
+      "n_params": 503681
+    },
+    {
+      "model": "early_fusion",
+      "seed": 2024,
+      "best_val_f1": 0.8273092369477911,
+      "n_params": 503681
+    },
+    {
+      "model": "late_fusion",
+      "seed": 42,
+      "best_val_f1": 0.8333333333333334,
+      "n_params": 454659
+    },
+    {
+      "model": "late_fusion",
+      "seed": 123,
+      "best_val_f1": 0.8259109311740891,
+      "n_params": 454659
+    },
+    {
+      "model": "late_fusion",
+      "seed": 2024,
+      "best_val_f1": 0.825,
+      "n_params": 454659
+    },
+    {
+      "model": "fixed_weight_fusion",
+      "seed": 42,
+      "best_val_f1": 0.8226415094339623,
+      "n_params": 470913
+    },
+    {
+      "model": "fixed_weight_fusion",
+      "seed": 123,
+      "best_val_f1": 0.8235294117647058,
+      "n_params": 470913
+    },
+    {
+      "model": "fixed_weight_fusion",
+      "seed": 2024,
+      "best_val_f1": 0.8201438848920863,
+      "n_params": 470913
+    },
+    {
+      "model": "dropout_only_fusion",
+      "seed": 42,
+      "best_val_f1": 0.8273092369477911,
+      "n_params": 503681
+    },
+    {
+      "model": "dropout_only_fusion",
+      "seed": 123,
+      "best_val_f1": 0.8188976377952756,
+      "n_params": 503681
+    },
+    {
+      "model": "dropout_only_fusion",
+      "seed": 2024,
+      "best_val_f1": 0.833976833976834,
+      "n_params": 503681
+    },
+    {
+      "model": "gating_only_no_dropout",
+      "seed": 42,
+      "best_val_f1": 0.8253968253968254,
+      "n_params": 495940
+    },
+    {
+      "model": "gating_only_no_dropout",
+      "seed": 123,
+      "best_val_f1": 0.8171206225680934,
+      "n_params": 495940
+    },
+    {
+      "model": "gating_only_no_dropout",
+      "seed": 2024,
+      "best_val_f1": 0.8195488721804511,
+      "n_params": 495940
+    },
+    {
+      "model": "imputation_baseline_post2023",
+      "seed": 42,
+      "best_val_f1": 0.831275720164609,
+      "n_params": 701697
+    },
+    {
+      "model": "imputation_baseline_post2023",
+      "seed": 123,
+      "best_val_f1": 0.824,
+      "n_params": 701697
+    },
+    {
+      "model": "imputation_baseline_post2023",
+      "seed": 2024,
+      "best_val_f1": 0.8178137651821862,
+      "n_params": 701697
+    },
+    {
+      "model": "attention_gated_fusion_full",
+      "seed": 42,
+      "best_val_f1": 0.8203125,
+      "n_params": 495940
+    },
+    {
+      "model": "attention_gated_fusion_full",
+      "seed": 123,
+      "best_val_f1": 0.8225806451612904,
+      "n_params": 495940
+    },
+    {
+      "model": "attention_gated_fusion_full",
+      "seed": 2024,
+      "best_val_f1": 0.8235294117647058,
+      "n_params": 495940
+    }
+  ]
 }
