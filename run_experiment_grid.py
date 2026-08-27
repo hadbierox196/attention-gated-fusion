@@ -6,14 +6,19 @@ model at all 4 missingness rates (0.00, 0.25, 0.50, 0.75), producing the
 7 x 3 x 4 = 84 evaluation points reported in Table 3.1.
 
 Writes:
-  - results_raw.csv   (one row per model x seed x missingness_rate)
-  - config_log.json   (full config + environment info for each run, for
-                        reproducibility per Section 2.7)
+  - results_raw.csv     (one row per model x seed x missingness_rate)
+  - config_log.json     (full config + environment info for each run, for
+                          reproducibility per Section 2.7)
+  - checkpoints/*.pt     (best-val-F1 checkpoint per (model, seed), so
+                          diagnostics.py / run_diagnostics.py can load
+                          trained models directly instead of retraining —
+                          needed for the Future Work #1 mechanism analysis)
 
-NOTE: this has not been executed against real CMU-MOSI data as part of
-producing this scaffold. Running it end-to-end, and confirming the output
-matches Table 3.1 / Table 3.3 / Table 3.4, is a required verification step
-before this repository is cited as the code-availability link (see README).
+CONFIRMED: this has been executed against real CMU-MOSI data; see manuscript
+Section 3 and the archived results at https://doi.org/10.5281/zenodo.22105162.
+Checkpoint saving was added after that run, so re-running this script (e.g.
+to include hard_mask_gated_fusion, per config.yaml) is required before
+run_diagnostics.py has checkpoints to load from.
 """
 
 from __future__ import annotations
@@ -102,6 +107,9 @@ def run_grid(config_path: str = "config.yaml"):
     test_ds = CmuMosiAligned(data_path, split="test")
     test_loader = torch.utils.data.DataLoader(test_ds, batch_size=config["batch_size"], shuffle=False)
 
+    checkpoint_dir = Path(config.get("output", {}).get("checkpoint_dir", "checkpoints"))
+    checkpoint_dir.mkdir(parents=True, exist_ok=True)
+
     for model_name in config["models"]:
         for seed in config["seeds"]:
             print(f"=== training {model_name} seed={seed} ===")
@@ -127,6 +135,25 @@ def run_grid(config_path: str = "config.yaml"):
             fusion_model = MODEL_REGISTRY[model_name](hidden_dim=hidden_dim).to(device)
             encoders.load_state_dict(best_state["encoders"])
             fusion_model.load_state_dict(best_state["fusion_model"])
+
+            # Save checkpoint to disk so diagnostics.py can load this exact
+            # trained model later without retraining (Future Work #1).
+            ckpt_path = checkpoint_dir / f"{model_name}__seed{seed}.pt"
+            torch.save(
+                {
+                    "model_name": model_name,
+                    "seed": seed,
+                    "encoders_state_dict": best_state["encoders"],
+                    "fusion_model_state_dict": best_state["fusion_model"],
+                    "best_val_f1": best_val_f1,
+                    "text_dim": test_ds.text.shape[-1],
+                    "audio_dim": test_ds.audio_dim,
+                    "vision_dim": test_ds.vision_dim,
+                    "hidden_dim": hidden_dim,
+                },
+                ckpt_path,
+            )
+            print(f"  saved checkpoint -> {ckpt_path}")
 
             is_gated = model_name in GATED_MODELS
 
