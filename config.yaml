@@ -7,7 +7,7 @@ learning_rate: 1.0e-3
 batch_size: 32
 epochs: 15
 hidden_dim: 128            # all encoders and gate
-seeds: [42, 123, 2024]
+seeds: [42, 123, 2024]  # 5-seed replication adds [7, 99]; see manuscript Section 2.5 and README
 
 data:
   path: null                # set to local path of aligned_50.pkl before running
