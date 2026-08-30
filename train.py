@@ -61,11 +61,12 @@ def train_one_run(
     batch_size: int = 32,
     epochs: int = 15,
     device: str = "cuda" if torch.cuda.is_available() else "cpu",
+    dataset_cls=CmuMosiAligned,
 ):
     set_seed(seed)
 
-    train_ds = CmuMosiAligned(data_path, split="train")
-    val_ds = CmuMosiAligned(data_path, split="valid")
+    train_ds = dataset_cls(data_path, split="train")
+    val_ds = dataset_cls(data_path, split="valid")
 
     train_loader = DataLoader(train_ds, batch_size=batch_size, shuffle=True)
     val_loader = DataLoader(val_ds, batch_size=batch_size, shuffle=False)

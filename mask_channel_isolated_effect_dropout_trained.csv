@@ -1,0 +1,6 @@
+model,seed,mean_gate_weight_text_mask_on,mean_gate_weight_text_mask_off,shift
+attention_gated_fusion_full,42,0.9857,0.9833,-0.0024
+attention_gated_fusion_full,123,0.8224,0.8142,-0.0081
+attention_gated_fusion_full,2024,0.7750,0.7655,-0.0095
+attention_gated_fusion_full,7,0.6489,0.6369,-0.0120
+attention_gated_fusion_full,99,0.7262,0.7186,-0.0076

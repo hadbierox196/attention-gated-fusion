@@ -7,15 +7,33 @@ learning_rate: 1.0e-3
 batch_size: 32
 epochs: 15
 hidden_dim: 128            # all encoders and gate
-seeds: [42, 123, 2024]  # 5-seed replication adds [7, 99]; see manuscript Section 2.5 and README
+seeds: [42, 123, 2024, 7, 99]  # 5-seed replication (originally [42, 123, 2024]; see manuscript Section 2.5 and README)
 
 data:
   path: null                # set to local path of aligned_50.pkl before running
-  text_dim: 300              # GloVe
+  # Corrected per manuscript Section 2.1: this file previously said
+  # `text_dim: 300  # GloVe`, but the runtime-loaded features are actually
+  # 768-dim (consistent with a BERT-based release, not GloVe). This value is
+  # documentation only -- TriModalEncoders is constructed from the dataset's
+  # actual runtime shape (see train.py), so the stale comment never affected
+  # training, only what a reader of this file would have assumed.
+  text_dim: 768              # BERT-based (see manuscript Section 2.1 provenance discussion)
+
+mosei:
+  # Multi-Dataset Extension checklist item #1/#2: mirror the MOSI block
+  # above wherever fields exist; document deviations (different label
+  # distribution, different modality dims) explicitly rather than silently.
+  # Values below are confirmed at runtime against the actual loaded dataset
+  # (see MOSEI_PROVENANCE.md sign-off) -- not assumed or carried over from MOSI.
+  path: null                  # set to local path of mosei_aligned_50.pkl before running
+  text_dim: 768                # BERT, confirmed at runtime (matches MOSI's, coincidentally)
+  audio_dim: 74                # COVAREP, confirmed at runtime
+  vision_dim: 35               # Facet, confirmed at runtime
+  seeds: [42, 123, 2024, 7, 99]   # go straight to 5 seeds (checklist item #3) -- do not re-pilot at 3
 
 missingness:
-  train_rate_range: [0.0, 0.75]   # sampled Uniform per batch (Section 2.4)
-  eval_rates: [0.0, 0.25, 0.5, 0.75]
+  train_rate_range: [0.0, 0.75]   # sampled Uniform per batch (Section 2.4) -- same for MOSEI (item #2)
+  eval_rates: [0.0, 0.25, 0.5, 0.75]   # same for MOSEI (item #2)
 
 models:
   - early_fusion

@@ -1,0 +1,30 @@
+# CITATION.cff — replaces the placeholder "Joe Johnson" / generic-ORCID
+# metadata seen in the Zenodo deposit screenshot (checklist item D3).
+#
+# I (the assistant) do not have your real name, affiliation, or ORCID, so I
+# have NOT filled in real values below — every field marked TODO needs your
+# actual information before this is usable. This file is auto-read by
+# GitHub (for the "Cite this repository" button) and by Zenodo's GitHub
+# integration (for the deposit's author metadata) when you tag a release,
+# so filling it in correctly now avoids having to fix it in a second
+# Zenodo deposit later.
+#
+# Reference: https://citation-file-format.github.io/
+
+cff-version: 1.2.0
+message: "If you use this code or replicate these findings, please cite it as below."
+title: "Modality Dropout Prevents Degenerate Collapse but Not Graded Missingness Robustness in Attention-Gated Multimodal Fusion: A Replication Study Across CMU-MOSI and CMU-MOSEI"
+version: "2.0.0"  # TODO: bump this to match whatever version tag you release as (e.g. v2.0-mosei-extension)
+date-released: "2026-08-29"  # TODO: set to your actual GitHub release date
+authors:
+  - family-names: "TODO-your-last-name"
+    given-names: "TODO-your-first-name"
+    orcid: "https://orcid.org/0000-0000-0000-0000"  # TODO: your real ORCID, or delete this line if you don't have one
+    affiliation: "TODO-your-institution"
+  # Add one entry per co-author, same format, in author order.
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.PLACEHOLDER"  # TODO: replace once Zenodo mints the new DOI (see README's GitHub -> Zenodo section)
+    description: "Zenodo archive of this repository"
+repository-code: "https://github.com/TODO-your-org/TODO-your-repo-name"  # TODO
+license: "TODO"  # TODO: pick a real license (e.g. MIT, Apache-2.0) and add a matching LICENSE file — none is currently included in this repo

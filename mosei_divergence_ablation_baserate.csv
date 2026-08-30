@@ -1,0 +1,6 @@
+seed,ablation,n_train_used,achieved_majority_rate,text_missing_accuracy,text_missing_f1,collapsed
+42,baserate,13889,0.5960,,0.2725,False
+123,baserate,13889,0.5960,,0.5610,False
+2024,baserate,13889,0.5960,,0.4096,False
+7,baserate,13889,0.5960,,0.5166,False
+99,baserate,13889,0.5960,,0.4041,False

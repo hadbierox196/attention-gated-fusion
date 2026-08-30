@@ -15,7 +15,7 @@ Writes:
                           needed for the Future Work #1 mechanism analysis)
 
 CONFIRMED: this has been executed against real CMU-MOSI data; see manuscript
-Section 3 and the archived results at https://doi.org/10.5281/zenodo.22105162.
+Section 3 and the archived results at https://doi.org/10.5281/zenodo.22141293.
 Checkpoint saving was added after that run, so re-running this script (e.g.
 to include hard_mask_gated_fusion, per config.yaml) is required before
 run_diagnostics.py has checkpoints to load from.

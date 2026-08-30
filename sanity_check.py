@@ -16,9 +16,12 @@ from train import MODEL_REGISTRY, GATED_MODELS, DROPOUT_TRAINED, set_seed
 
 def overfit_check(model_name, data_path, n_samples=16, steps=50, lr=1e-3, seed=42,
                    dropout_rate=None, verbose_masked_collisions=True,
+                   dataset_cls=None,
                    device="cuda" if torch.cuda.is_available() else "cpu"):
+    if dataset_cls is None:
+        dataset_cls = CmuMosiAligned
     set_seed(seed)
-    ds = CmuMosiAligned(data_path, split="train")
+    ds = dataset_cls(data_path, split="train")
     subset = Subset(ds, list(range(n_samples)))
     loader = DataLoader(subset, batch_size=n_samples, shuffle=False)
     batch = next(iter(loader))
@@ -118,10 +121,19 @@ if __name__ == "__main__":
                               "hard_mask_gated_fusion) instead of letting it be drawn from an "
                               "RNG stream whose state has drifted per-model. Non-dropout models "
                               "always use rate=0.0 regardless of this flag.")
+    parser.add_argument("--dataset", choices=["mosi", "mosei"], default="mosi",
+                         help="Which dataset's loader to use. 'mosei' requires "
+                              "data/dataset_mosei.py's FEATURE_RELEASE_NOTE to be "
+                              "filled in first (checklist item #1/#8).")
     args = parser.parse_args()
 
+    if args.dataset == "mosei":
+        from data.dataset_mosei import CmuMoseiAligned as _DatasetCls
+    else:
+        _DatasetCls = CmuMosiAligned
+
     results = {m: overfit_check(m, args.data_path, n_samples=args.n_samples, steps=args.steps,
-                                 dropout_rate=args.dropout_rate)
+                                 dropout_rate=args.dropout_rate, dataset_cls=_DatasetCls)
                for m in args.models}
 
     print("\n=== Summary ===")
